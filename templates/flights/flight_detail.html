@@ -1,531 +1,958 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base.html" %}
 
-<head>
 
-    <meta charset="UTF-8">
+{% block title %}
+    {{ flight.flight_iata }} | Flight Intelligence
+{% endblock %}
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
 
-    <title>
-        {{ flight.flight_iata }} - Flight Intelligence
-    </title>
+{% block extra_css %}
 
-    <style>
+<style>
 
-        * {
-            box-sizing: border-box;
+    /* =====================================================
+       FLIGHT DETAIL
+    ===================================================== */
+
+    .flight-detail-container {
+        width: 100%;
+        max-width: 1200px;
+
+        margin: 0 auto;
+
+        padding: 40px 25px 60px;
+    }
+
+
+    /* =====================================================
+       BACK LINK
+    ===================================================== */
+
+    .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+
+        margin-bottom: 20px;
+
+        color: #2563eb;
+
+        text-decoration: none;
+
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .back-link:hover {
+        color: #1d4ed8;
+    }
+
+
+    /* =====================================================
+       MAIN FLIGHT HEADER
+    ===================================================== */
+
+    .flight-header {
+        background: white;
+
+        border: 1px solid #eaecf0;
+
+        border-radius: 15px;
+
+        padding: 30px;
+
+        margin-bottom: 20px;
+
+        box-shadow:
+            0 5px 25px
+            rgba(15, 23, 42, 0.06);
+    }
+
+    .flight-header-top {
+        display: flex;
+
+        align-items: center;
+
+        justify-content: space-between;
+
+        gap: 20px;
+    }
+
+    .flight-number {
+        color: #111827;
+
+        font-size: 40px;
+
+        line-height: 1.1;
+
+        font-weight: 750;
+    }
+
+    .airline-name {
+        margin-top: 7px;
+
+        color: #6b7280;
+
+        font-size: 17px;
+    }
+
+
+    /* =====================================================
+       STATUS
+    ===================================================== */
+
+    .flight-status {
+        display: inline-flex;
+
+        align-items: center;
+
+        padding: 9px 17px;
+
+        border-radius: 999px;
+
+        background: #dcfce7;
+
+        color: #166534;
+
+        font-size: 12px;
+
+        font-weight: 750;
+
+        text-transform: uppercase;
+
+        letter-spacing: 0.3px;
+    }
+
+
+    /* =====================================================
+       ROUTE
+    ===================================================== */
+
+    .route {
+        display: grid;
+
+        grid-template-columns:
+            1fr auto 1fr;
+
+        align-items: center;
+
+        text-align: center;
+
+        margin-top: 38px;
+    }
+
+    .airport-code {
+        color: #111827;
+
+        font-size: 42px;
+
+        line-height: 1;
+
+        font-weight: 750;
+    }
+
+    .airport-name {
+        margin-top: 9px;
+
+        color: #6b7280;
+
+        font-size: 14px;
+
+        line-height: 1.5;
+    }
+
+    .route-arrow {
+        padding: 0 30px;
+
+        color: #2563eb;
+
+        font-size: 30px;
+    }
+
+
+    /* =====================================================
+       INFORMATION GRID
+    ===================================================== */
+
+    .information-grid {
+        display: grid;
+
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+        gap: 20px;
+    }
+
+
+    /* =====================================================
+       INFORMATION CARD
+    ===================================================== */
+
+    .information-card {
+        background: white;
+
+        border: 1px solid #eaecf0;
+
+        border-radius: 14px;
+
+        padding: 25px;
+
+        box-shadow:
+            0 5px 25px
+            rgba(15, 23, 42, 0.05);
+    }
+
+    .card-title {
+        display: flex;
+
+        align-items: center;
+
+        gap: 9px;
+
+        margin: 0 0 20px;
+
+        color: #172033;
+
+        font-size: 18px;
+
+        font-weight: 700;
+    }
+
+    .card-icon {
+        font-size: 18px;
+    }
+
+
+    /* =====================================================
+       DETAIL ROW
+    ===================================================== */
+
+    .detail-row {
+        display: flex;
+
+        align-items: center;
+
+        justify-content: space-between;
+
+        gap: 20px;
+
+        padding: 12px 0;
+
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .detail-row:last-child {
+        border-bottom: none;
+
+        padding-bottom: 0;
+    }
+
+    .detail-row:first-of-type {
+        padding-top: 0;
+    }
+
+    .detail-label {
+        color: #6b7280;
+
+        font-size: 13px;
+    }
+
+    .detail-value {
+        color: #172033;
+
+        font-size: 13px;
+
+        font-weight: 650;
+
+        text-align: right;
+
+        word-break: break-word;
+    }
+
+
+    /* =====================================================
+       DELAY
+    ===================================================== */
+
+    .delay-value {
+        color: #c4320a;
+    }
+
+    .no-delay {
+        color: #027a48;
+    }
+
+
+    /* =====================================================
+       LIVE DATA
+    ===================================================== */
+
+    .live-card {
+        grid-column: 1 / -1;
+    }
+
+    .live-status {
+        display: inline-flex;
+
+        align-items: center;
+
+        gap: 7px;
+
+        margin-bottom: 20px;
+
+        padding: 7px 11px;
+
+        border-radius: 7px;
+
+        background: #f2f4f7;
+
+        color: #667085;
+
+        font-size: 12px;
+
+        font-weight: 600;
+    }
+
+    .live-dot {
+        width: 7px;
+        height: 7px;
+
+        border-radius: 50%;
+
+        background: #98a2b3;
+    }
+
+
+    /* =====================================================
+       RESPONSIVE
+    ===================================================== */
+
+    @media (max-width: 768px) {
+
+        .flight-detail-container {
+            padding:
+                30px 16px 45px;
         }
 
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #f4f7fb;
-            color: #1f2937;
+        .flight-header {
+            padding: 22px;
         }
 
-        .navbar {
-            background: #111827;
-            color: white;
-            padding: 20px 40px;
-            font-size: 22px;
-            font-weight: bold;
-        }
+        .flight-header-top {
+            flex-direction: column;
 
-        .container {
-            max-width: 1200px;
-            margin: 40px auto;
-            padding: 20px;
-        }
-
-        .back {
-            display: inline-block;
-            margin-bottom: 20px;
-            color: #2563eb;
-            text-decoration: none;
-        }
-
-        .header {
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            margin-bottom: 20px;
-            box-shadow: 0 5px 25px rgba(0,0,0,0.08);
-        }
-
-        .header-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            align-items: flex-start;
         }
 
         .flight-number {
-            font-size: 40px;
-            font-weight: bold;
-        }
-
-        .airline {
-            color: #6b7280;
-            font-size: 18px;
-            margin-top: 5px;
-        }
-
-        .status {
-            padding: 10px 20px;
-            border-radius: 20px;
-            background: #dcfce7;
-            color: #166534;
-            font-weight: bold;
+            font-size: 32px;
         }
 
         .route {
-            display: grid;
-            grid-template-columns: 1fr auto 1fr;
-            align-items: center;
-            text-align: center;
-            margin-top: 40px;
+            grid-template-columns: 1fr;
+
+            gap: 18px;
+        }
+
+        .route-arrow {
+            padding: 0;
+
+            transform: rotate(90deg);
         }
 
         .airport-code {
-            font-size: 42px;
-            font-weight: bold;
+            font-size: 36px;
         }
 
-        .airport-name {
-            color: #6b7280;
-            margin-top: 8px;
+        .information-grid {
+            grid-template-columns: 1fr;
         }
 
-        .arrow {
-            font-size: 35px;
-            padding: 0 30px;
+        .live-card {
+            grid-column: auto;
         }
 
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-        }
+    }
 
-        .card {
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 5px 25px rgba(0,0,0,0.08);
-        }
+</style>
 
-        .card h2 {
-            margin-top: 0;
-            margin-bottom: 20px;
-        }
-
-        .row {
-            display: flex;
-            justify-content: space-between;
-            padding: 12px 0;
-            border-bottom: 1px solid #e5e7eb;
-        }
-
-        .label {
-            color: #6b7280;
-        }
-
-        .value {
-            font-weight: bold;
-            text-align: right;
-        }
-
-        @media (max-width: 768px) {
-
-            .grid {
-                grid-template-columns: 1fr;
-            }
-
-            .route {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
-
-            .arrow {
-                transform: rotate(90deg);
-            }
-
-            .header-top {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 15px;
-            }
-
-        }
-
-    </style>
-
-</head>
-
-<body>
-
-    <div class="navbar">
-        ✈ Flight Intelligence
-    </div>
+{% endblock %}
 
 
-    <div class="container">
+{% block content %}
 
-        <a
-            href="{% url 'flight_search' %}"
-            class="back"
-        >
-            ← Back to Flight Search
-        </a>
+<main class="flight-detail-container">
 
 
-        <div class="header">
+    <!-- =================================================
+         BACK
+    ================================================== -->
 
-            <div class="header-top">
+    <a
+        href="{% url 'flight_search' %}"
+        class="back-link"
+    >
+        ← Back to Flight Search
+    </a>
 
-                <div>
 
-                    <div class="flight-number">
-                        {{ flight.flight_iata }}
-                    </div>
+    <!-- =================================================
+         FLIGHT HEADER
+    ================================================== -->
 
-                    <div class="airline">
-                        {{ flight.airline_name }}
-                    </div>
+    <section class="flight-header">
 
+        <div class="flight-header-top">
+
+
+            <div>
+
+                <div class="flight-number">
+                    {{ flight.flight_iata }}
                 </div>
 
-                <div class="status">
-                    {{ flight.flight_status|upper }}
+                <div class="airline-name">
+                    {{ flight.airline_name|default:"Unknown airline" }}
                 </div>
 
             </div>
 
 
-            <div class="route">
-
-                <div>
-
-                    <div class="airport-code">
-                        {{ flight.departure_iata }}
-                    </div>
-
-                    <div class="airport-name">
-                        {{ flight.departure_airport }}
-                    </div>
-
-                </div>
-
-
-                <div class="arrow">
-                    ✈ →
-                </div>
-
-
-                <div>
-
-                    <div class="airport-code">
-                        {{ flight.arrival_iata }}
-                    </div>
-
-                    <div class="airport-name">
-                        {{ flight.arrival_airport }}
-                    </div>
-
-                </div>
-
+            <div class="flight-status">
+                {{ flight.flight_status|upper }}
             </div>
+
 
         </div>
 
 
-        <div class="grid">
+        <!-- ROUTE -->
 
-            <!-- Departure -->
+        <div class="route">
 
-            <div class="card">
 
-                <h2>🛫 Departure</h2>
+            <!-- DEPARTURE -->
 
-                <div class="row">
-                    <span class="label">
-                        Airport
-                    </span>
+            <div>
 
-                    <span class="value">
-                        {{ flight.departure_iata }}
-                    </span>
+                <div class="airport-code">
+                    {{ flight.departure_iata|default:"N/A" }}
                 </div>
 
-                <div class="row">
-                    <span class="label">
-                        Terminal
-                    </span>
-
-                    <span class="value">
-                        {{ flight.departure_terminal|default:"N/A" }}
-                    </span>
-                </div>
-
-                <div class="row">
-                    <span class="label">
-                        Gate
-                    </span>
-
-                    <span class="value">
-                        {{ flight.departure_gate|default:"N/A" }}
-                    </span>
-                </div>
-
-                <div class="row">
-                    <span class="label">
-                        Scheduled
-                    </span>
-
-                    <span class="value">
-                        {{ flight.departure_scheduled|default:"N/A" }}
-                    </span>
-                </div>
-
-                <div class="row">
-                    <span class="label">
-                        Actual
-                    </span>
-
-                    <span class="value">
-                        {{ flight.departure_actual|default:"N/A" }}
-                    </span>
+                <div class="airport-name">
+                    {{ flight.departure_airport|default:"Unknown airport" }}
                 </div>
 
             </div>
 
 
-            <!-- Arrival -->
+            <!-- ARROW -->
 
-            <div class="card">
+            <div class="route-arrow">
+                ✈ →
+            </div>
 
-                <h2>🛬 Arrival</h2>
 
-                <div class="row">
-                    <span class="label">
-                        Airport
-                    </span>
+            <!-- ARRIVAL -->
 
-                    <span class="value">
-                        {{ flight.arrival_iata }}
-                    </span>
+            <div>
+
+                <div class="airport-code">
+                    {{ flight.arrival_iata|default:"N/A" }}
                 </div>
 
-                <div class="row">
-                    <span class="label">
-                        Terminal
-                    </span>
-
-                    <span class="value">
-                        {{ flight.arrival_terminal|default:"N/A" }}
-                    </span>
+                <div class="airport-name">
+                    {{ flight.arrival_airport|default:"Unknown airport" }}
                 </div>
 
-                <div class="row">
-                    <span class="label">
-                        Gate
-                    </span>
+            </div>
 
-                    <span class="value">
-                        {{ flight.arrival_gate|default:"N/A" }}
-                    </span>
-                </div>
 
-                <div class="row">
-                    <span class="label">
-                        Baggage
-                    </span>
+        </div>
 
-                    <span class="value">
-                        {{ flight.arrival_baggage|default:"N/A" }}
-                    </span>
-                </div>
+    </section>
 
-                <div class="row">
-                    <span class="label">
-                        Delay
-                    </span>
 
-                    <span class="value">
-                        {% if flight.arrival_delay %}
-                            {{ flight.arrival_delay }} minutes
-                        {% else %}
+    <!-- =================================================
+         INFORMATION CARDS
+    ================================================== -->
+
+    <div class="information-grid">
+
+
+        <!-- =================================================
+             DEPARTURE
+        ================================================== -->
+
+        <section class="information-card">
+
+            <h2 class="card-title">
+
+                <span class="card-icon">
+                    🛫
+                </span>
+
+                Departure
+
+            </h2>
+
+
+            <div class="detail-row">
+
+                <span class="detail-label">
+                    Airport
+                </span>
+
+                <span class="detail-value">
+                    {{ flight.departure_iata|default:"N/A" }}
+                </span>
+
+            </div>
+
+
+            <div class="detail-row">
+
+                <span class="detail-label">
+                    Terminal
+                </span>
+
+                <span class="detail-value">
+                    {{ flight.departure_terminal|default:"N/A" }}
+                </span>
+
+            </div>
+
+
+            <div class="detail-row">
+
+                <span class="detail-label">
+                    Gate
+                </span>
+
+                <span class="detail-value">
+                    {{ flight.departure_gate|default:"N/A" }}
+                </span>
+
+            </div>
+
+
+            <div class="detail-row">
+
+                <span class="detail-label">
+                    Scheduled
+                </span>
+
+                <span class="detail-value">
+                    {{ flight.departure_scheduled|default:"N/A" }}
+                </span>
+
+            </div>
+
+
+            <div class="detail-row">
+
+                <span class="detail-label">
+                    Actual
+                </span>
+
+                <span class="detail-value">
+                    {{ flight.departure_actual|default:"N/A" }}
+                </span>
+
+            </div>
+
+
+            <div class="detail-row">
+
+                <span class="detail-label">
+                    Delay
+                </span>
+
+                <span class="detail-value">
+
+                    {% if flight.departure_delay %}
+
+                        <span class="delay-value">
+                            {{ flight.departure_delay }} minutes
+                        </span>
+
+                    {% else %}
+
+                        <span class="no-delay">
                             No delay
-                        {% endif %}
-                    </span>
-                </div>
+                        </span>
 
-                <div class="row">
-                    <span class="label">
-                        Estimated
-                    </span>
+                    {% endif %}
 
-                    <span class="value">
-                        {{ flight.arrival_estimated|default:"N/A" }}
-                    </span>
-                </div>
+                </span>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             ARRIVAL
+        ================================================== -->
+
+        <section class="information-card">
+
+            <h2 class="card-title">
+
+                <span class="card-icon">
+                    🛬
+                </span>
+
+                Arrival
+
+            </h2>
+
+
+            <div class="detail-row">
+
+                <span class="detail-label">
+                    Airport
+                </span>
+
+                <span class="detail-value">
+                    {{ flight.arrival_iata|default:"N/A" }}
+                </span>
 
             </div>
 
 
-            <!-- Airline -->
+            <div class="detail-row">
 
-            <div class="card">
+                <span class="detail-label">
+                    Terminal
+                </span>
 
-                <h2>🏢 Airline</h2>
-
-                <div class="row">
-                    <span class="label">
-                        Name
-                    </span>
-
-                    <span class="value">
-                        {{ flight.airline_name }}
-                    </span>
-                </div>
-
-                <div class="row">
-                    <span class="label">
-                        IATA
-                    </span>
-
-                    <span class="value">
-                        {{ flight.airline_iata|default:"N/A" }}
-                    </span>
-                </div>
-
-                <div class="row">
-                    <span class="label">
-                        ICAO
-                    </span>
-
-                    <span class="value">
-                        {{ flight.airline_icao|default:"N/A" }}
-                    </span>
-                </div>
+                <span class="detail-value">
+                    {{ flight.arrival_terminal|default:"N/A" }}
+                </span>
 
             </div>
 
 
-            <!-- Aircraft -->
+            <div class="detail-row">
 
-            <div class="card">
+                <span class="detail-label">
+                    Gate
+                </span>
 
-                <h2>🛩️ Aircraft</h2>
-
-                <div class="row">
-                    <span class="label">
-                        Registration
-                    </span>
-
-                    <span class="value">
-                        {{ flight.aircraft_registration|default:"N/A" }}
-                    </span>
-                </div>
-
-                <div class="row">
-                    <span class="label">
-                        IATA
-                    </span>
-
-                    <span class="value">
-                        {{ flight.aircraft_iata|default:"N/A" }}
-                    </span>
-                </div>
-
-                <div class="row">
-                    <span class="label">
-                        ICAO
-                    </span>
-
-                    <span class="value">
-                        {{ flight.aircraft_icao|default:"N/A" }}
-                    </span>
-                </div>
-
-                <div class="row">
-                    <span class="label">
-                        ICAO24
-                    </span>
-
-                    <span class="value">
-                        {{ flight.aircraft_icao24|default:"N/A" }}
-                    </span>
-                </div>
+                <span class="detail-value">
+                    {{ flight.arrival_gate|default:"N/A" }}
+                </span>
 
             </div>
 
 
-            <!-- Live Data -->
+            <div class="detail-row">
 
-            <div class="card">
+                <span class="detail-label">
+                    Baggage
+                </span>
 
-                <h2>📡 Live Position</h2>
-
-                <div class="row">
-                    <span class="label">
-                        Latitude
-                    </span>
-
-                    <span class="value">
-                        {{ flight.latitude|default:"N/A" }}
-                    </span>
-                </div>
-
-                <div class="row">
-                    <span class="label">
-                        Longitude
-                    </span>
-
-                    <span class="value">
-                        {{ flight.longitude|default:"N/A" }}
-                    </span>
-                </div>
-
-                <div class="row">
-                    <span class="label">
-                        Altitude
-                    </span>
-
-                    <span class="value">
-                        {{ flight.altitude|default:"N/A" }}
-                    </span>
-                </div>
-
-                <div class="row">
-                    <span class="label">
-                        Horizontal Speed
-                    </span>
-
-                    <span class="value">
-                        {{ flight.speed_horizontal|default:"N/A" }}
-                    </span>
-                </div>
-
-                <div class="row">
-                    <span class="label">
-                        Direction
-                    </span>
-
-                    <span class="value">
-                        {{ flight.direction|default:"N/A" }}
-                    </span>
-                </div>
+                <span class="detail-value">
+                    {{ flight.arrival_baggage|default:"N/A" }}
+                </span>
 
             </div>
 
-        </div>
+
+            <div class="detail-row">
+
+                <span class="detail-label">
+                    Delay
+                </span>
+
+                <span class="detail-value">
+
+                    {% if flight.arrival_delay %}
+
+                        <span class="delay-value">
+                            {{ flight.arrival_delay }} minutes
+                        </span>
+
+                    {% else %}
+
+                        <span class="no-delay">
+                            No delay
+                        </span>
+
+                    {% endif %}
+
+                </span>
+
+            </div>
+
+
+            <div class="detail-row">
+
+                <span class="detail-label">
+                    Estimated
+                </span>
+
+                <span class="detail-value">
+                    {{ flight.arrival_estimated|default:"N/A" }}
+                </span>
+
+            </div>
+
+
+            <div class="detail-row">
+
+                <span class="detail-label">
+                    Actual
+                </span>
+
+                <span class="detail-value">
+                    {{ flight.arrival_actual|default:"N/A" }}
+                </span>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             AIRLINE
+        ================================================== -->
+
+        <section class="information-card">
+
+            <h2 class="card-title">
+
+                <span class="card-icon">
+                    🏢
+                </span>
+
+                Airline
+
+            </h2>
+
+
+            <div class="detail-row">
+
+                <span class="detail-label">
+                    Name
+                </span>
+
+                <span class="detail-value">
+                    {{ flight.airline_name|default:"N/A" }}
+                </span>
+
+            </div>
+
+
+            <div class="detail-row">
+
+                <span class="detail-label">
+                    IATA
+                </span>
+
+                <span class="detail-value">
+                    {{ flight.airline_iata|default:"N/A" }}
+                </span>
+
+            </div>
+
+
+            <div class="detail-row">
+
+                <span class="detail-label">
+                    ICAO
+                </span>
+
+                <span class="detail-value">
+                    {{ flight.airline_icao|default:"N/A" }}
+                </span>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             AIRCRAFT
+        ================================================== -->
+
+        <section class="information-card">
+
+            <h2 class="card-title">
+
+                <span class="card-icon">
+                    🛩️
+                </span>
+
+                Aircraft
+
+            </h2>
+
+
+            <div class="detail-row">
+
+                <span class="detail-label">
+                    Registration
+                </span>
+
+                <span class="detail-value">
+                    {{ flight.aircraft_registration|default:"N/A" }}
+                </span>
+
+            </div>
+
+
+            <div class="detail-row">
+
+                <span class="detail-label">
+                    IATA
+                </span>
+
+                <span class="detail-value">
+                    {{ flight.aircraft_iata|default:"N/A" }}
+                </span>
+
+            </div>
+
+
+            <div class="detail-row">
+
+                <span class="detail-label">
+                    ICAO
+                </span>
+
+                <span class="detail-value">
+                    {{ flight.aircraft_icao|default:"N/A" }}
+                </span>
+
+            </div>
+
+
+            <div class="detail-row">
+
+                <span class="detail-label">
+                    ICAO24
+                </span>
+
+                <span class="detail-value">
+                    {{ flight.aircraft_icao24|default:"N/A" }}
+                </span>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             LIVE POSITION
+        ================================================== -->
+
+        <section class="information-card live-card">
+
+            <h2 class="card-title">
+
+                <span class="card-icon">
+                    📡
+                </span>
+
+                Live Position
+
+            </h2>
+
+
+            <div class="live-status">
+
+                <span class="live-dot"></span>
+
+                Live position data
+
+            </div>
+
+
+            <div class="detail-row">
+
+                <span class="detail-label">
+                    Latitude
+                </span>
+
+                <span class="detail-value">
+                    {{ flight.latitude|default:"N/A" }}
+                </span>
+
+            </div>
+
+
+            <div class="detail-row">
+
+                <span class="detail-label">
+                    Longitude
+                </span>
+
+                <span class="detail-value">
+                    {{ flight.longitude|default:"N/A" }}
+                </span>
+
+            </div>
+
+
+            <div class="detail-row">
+
+                <span class="detail-label">
+                    Altitude
+                </span>
+
+                <span class="detail-value">
+                    {{ flight.altitude|default:"N/A" }}
+                </span>
+
+            </div>
+
+
+            <div class="detail-row">
+
+                <span class="detail-label">
+                    Horizontal Speed
+                </span>
+
+                <span class="detail-value">
+                    {{ flight.speed_horizontal|default:"N/A" }}
+                </span>
+
+            </div>
+
+
+            <div class="detail-row">
+
+                <span class="detail-label">
+                    Vertical Speed
+                </span>
+
+                <span class="detail-value">
+                    {{ flight.speed_vertical|default:"N/A" }}
+                </span>
+
+            </div>
+
+
+            <div class="detail-row">
+
+                <span class="detail-label">
+                    Direction
+                </span>
+
+                <span class="detail-value">
+                    {{ flight.direction|default:"N/A" }}
+                </span>
+
+            </div>
+
+        </section>
+
 
     </div>
 
-</body>
 
-</html>
+</main>
+
+{% endblock %}

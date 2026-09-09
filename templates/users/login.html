@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Sign In | FlightIQ AI</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f7fb;
+            color: #172033;
+        }
+
+        .navbar {
+            height: 70px;
+            background: #111827;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 50px;
+        }
+
+        .brand {
+            color: white;
+            font-size: 22px;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .register-link {
+            color: white;
+            text-decoration: none;
+            font-size: 15px;
+        }
+
+        .register-link:hover {
+            opacity: 0.8;
+        }
+
+        .page {
+            min-height: calc(100vh - 70px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+        }
+
+        .card {
+            width: 100%;
+            max-width: 430px;
+            background: white;
+            border-radius: 14px;
+            padding: 38px;
+            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.08);
+        }
+
+        .icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 12px;
+            background: #111827;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 25px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            margin: 0 0 8px;
+            font-size: 28px;
+        }
+
+        .subtitle {
+            color: #667085;
+            margin-bottom: 28px;
+            font-size: 14px;
+        }
+
+        .message {
+            padding: 12px 14px;
+            border-radius: 8px;
+            background: #fef2f2;
+            color: #b42318;
+            font-size: 14px;
+            margin-bottom: 18px;
+        }
+
+        .field {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 7px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid #d0d5dd;
+            border-radius: 8px;
+            font-size: 15px;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #111827;
+            box-shadow: 0 0 0 3px rgba(17, 24, 39, 0.08);
+        }
+
+        .button {
+            width: 100%;
+            border: none;
+            border-radius: 8px;
+            padding: 13px;
+            background: #111827;
+            color: white;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            background: #1f2937;
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 22px;
+            font-size: 14px;
+            color: #667085;
+        }
+
+        .footer a {
+            color: #111827;
+            font-weight: 600;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+
+<nav class="navbar">
+    <a href="/" class="brand">✈ FlightIQ AI</a>
+
+    <a href="{% url 'register' %}" class="register-link">
+        Create Account
+    </a>
+</nav>
+
+<div class="page">
+
+    <div class="card">
+
+        <div class="icon">✈</div>
+
+        <h1>Welcome back</h1>
+
+        <div class="subtitle">
+            Sign in to continue to FlightIQ AI.
+        </div>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="message">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <div class="field">
+                <label for="username">Username</label>
+
+                <input
+                    type="text"
+                    id="username"
+                    name="username"
+                    placeholder="Enter your username"
+                    required
+                >
+            </div>
+
+            <div class="field">
+                <label for="password">Password</label>
+
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    placeholder="Enter your password"
+                    required
+                >
+            </div>
+
+            <button type="submit" class="button">
+                Sign In
+            </button>
+        </form>
+
+        <div class="footer">
+            Don't have an account?
+            <a href="{% url 'register' %}">Create one</a>
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

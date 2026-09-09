@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        {% block title %}
+            Flight Intelligence
+        {% endblock %}
+    </title>
+
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100%;
+        }
+
+        body {
+            font-family:
+                Inter,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                Arial,
+                sans-serif;
+
+            background: #f5f7fb;
+            color: #172033;
+        }
+
+
+        /* =====================================================
+           NAVBAR
+        ===================================================== */
+
+        .navbar {
+            width: 100%;
+            height: 72px;
+
+            background: #111827;
+            color: white;
+
+            border-bottom: 1px solid #1f2937;
+        }
+
+        .nav-container {
+            width: 100%;
+            max-width: 1400px;
+            height: 100%;
+
+            margin: 0 auto;
+            padding: 0 40px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            gap: 30px;
+        }
+
+
+        /* BRAND */
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+
+            color: white !important;
+            text-decoration: none !important;
+
+            font-size: 21px;
+            font-weight: 750;
+
+            white-space: nowrap;
+        }
+
+        .brand-icon {
+            font-size: 21px;
+        }
+
+
+        /* RIGHT SIDE */
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            height: 100%;
+            gap: 26px;
+        }
+
+
+        /* NAV LINKS */
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            height: 100%;
+            gap: 25px;
+        }
+
+        .nav-links a {
+            position: relative;
+
+            display: flex;
+            align-items: center;
+
+            height: 100%;
+
+            color: #cbd5e1;
+
+            text-decoration: none;
+
+            font-size: 14px;
+            font-weight: 500;
+
+            transition: color 0.2s ease;
+
+            white-space: nowrap;
+        }
+
+        .nav-links a:hover {
+            color: white;
+        }
+
+        .nav-links a.active {
+            color: white;
+            font-weight: 650;
+        }
+
+        .nav-links a.active::after {
+            content: "";
+
+            position: absolute;
+
+            left: 0;
+            right: 0;
+            bottom: 0;
+
+            height: 2px;
+
+            background: #3b82f6;
+
+            border-radius: 2px;
+        }
+
+
+        /* =====================================================
+           ACCOUNT
+        ===================================================== */
+
+        .account-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+
+            padding-left: 20px;
+
+            border-left: 1px solid #374151;
+
+            height: 38px;
+        }
+
+        .account-link {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+
+            color: white !important;
+
+            text-decoration: none !important;
+
+            font-size: 14px;
+            font-weight: 600;
+
+            white-space: nowrap;
+        }
+
+        .account-link:hover {
+            color: white !important;
+        }
+
+        .account-avatar {
+            width: 34px;
+            height: 34px;
+
+            border-radius: 50%;
+
+            background: #2563eb;
+
+            color: white;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 13px;
+            font-weight: 700;
+
+            flex-shrink: 0;
+        }
+
+
+        /* LOGOUT */
+
+        .logout-form {
+            margin: 0;
+            padding: 0;
+        }
+
+        .logout-button {
+            height: 32px;
+
+            border: 1px solid #475467;
+
+            background: transparent;
+
+            color: #cbd5e1;
+
+            padding: 0 12px;
+
+            border-radius: 7px;
+
+            cursor: pointer;
+
+            font-family: inherit;
+
+            font-size: 12px;
+            font-weight: 600;
+
+            transition: all 0.2s ease;
+        }
+
+        .logout-button:hover {
+            background: #1f2937;
+            color: white;
+            border-color: #64748b;
+        }
+
+
+        /* SIGN IN / REGISTER */
+
+        .auth-links {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .auth-links a {
+            color: #cbd5e1;
+
+            text-decoration: none;
+
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .auth-links a:hover {
+            color: white;
+        }
+
+        .auth-links .register-button {
+            padding: 8px 14px;
+
+            background: #2563eb;
+
+            color: white;
+
+            border-radius: 7px;
+        }
+
+        .auth-links .register-button:hover {
+            background: #1d4ed8;
+        }
+
+
+        /* =====================================================
+           PAGE
+        ===================================================== */
+
+        .page-content {
+            width: 100%;
+        }
+
+
+        /* =====================================================
+           RESPONSIVE NAVBAR
+        ===================================================== */
+
+        @media (max-width: 950px) {
+
+            .nav-container {
+                padding: 0 25px;
+            }
+
+            .nav-right {
+                gap: 16px;
+            }
+
+            .nav-links {
+                gap: 17px;
+            }
+
+            .account-area {
+                padding-left: 12px;
+            }
+
+        }
+
+
+        @media (max-width: 760px) {
+
+            .navbar {
+                height: 64px;
+            }
+
+            .nav-container {
+                padding: 0 18px;
+            }
+
+            .brand {
+                font-size: 18px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .account-area {
+                border-left: none;
+                padding-left: 0;
+            }
+
+            .account-link span:last-child {
+                display: none;
+            }
+
+        }
+
+
+        @media (max-width: 480px) {
+
+            .logout-button {
+                padding: 0 9px;
+            }
+
+            .auth-links {
+                gap: 9px;
+            }
+
+        }
+
+    </style>
+
+
+    {% block extra_css %}
+    {% endblock %}
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     GLOBAL NAVBAR
+===================================================== -->
+
+<nav class="navbar">
+
+    <div class="nav-container">
+
+
+        <!-- BRAND -->
+
+        <a
+            href="{% url 'dashboard' %}"
+            class="brand"
+        >
+
+            <span class="brand-icon">
+                ✈
+            </span>
+
+            <span>
+                Flight Intelligence
+            </span>
+
+        </a>
+
+
+        <!-- RIGHT SIDE -->
+
+        <div class="nav-right">
+
+
+            <!-- NAVIGATION -->
+
+            <div class="nav-links">
+
+                <a
+                    href="{% url 'dashboard' %}"
+                    class="{% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}"
+                >
+                    Dashboard
+                </a>
+
+
+                <a
+                    href="{% url 'flight_search' %}"
+                    class="{% if request.resolver_match.url_name == 'flight_search' or request.resolver_match.url_name == 'flight_detail' %}active{% endif %}"
+                >
+                    Flights
+                </a>
+
+
+                <a
+                    href="{% url 'ai_assistant' %}"
+                    class="{% if request.resolver_match.url_name == 'ai_assistant' %}active{% endif %}"
+                >
+                    AI Assistant
+                </a>
+
+            </div>
+
+
+            <!-- AUTHENTICATED USER -->
+
+            {% if user.is_authenticated %}
+
+                <div class="account-area">
+
+
+                    <a
+                        href="{% url 'account' %}"
+                        class="account-link"
+                    >
+
+                        <span class="account-avatar">
+                            {{ user.username|first|upper }}
+                        </span>
+
+                        <span>
+                            {{ user.username }}
+                        </span>
+
+                    </a>
+
+
+                    <form
+                        method="POST"
+                        action="{% url 'logout' %}"
+                        class="logout-form"
+                    >
+
+                        {% csrf_token %}
+
+                        <button
+                            type="submit"
+                            class="logout-button"
+                        >
+                            Logout
+                        </button>
+
+                    </form>
+
+
+                </div>
+
+
+            {% else %}
+
+
+                <!-- GUEST -->
+
+                <div class="auth-links">
+
+                    <a href="{% url 'login' %}">
+                        Sign In
+                    </a>
+
+                    <a
+                        href="{% url 'register' %}"
+                        class="register-button"
+                    >
+                        Register
+                    </a>
+
+                </div>
+
+
+            {% endif %}
+
+
+        </div>
+
+    </div>
+
+</nav>
+
+
+<!-- =====================================================
+     PAGE CONTENT
+===================================================== -->
+
+<div class="page-content">
+
+    {% block content %}
+    {% endblock %}
+
+</div>
+
+
+{% block extra_js %}
+{% endblock %}
+
+
+</body>
+
+</html>

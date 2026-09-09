@@ -1,9 +1,10 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
-from django.db.models import Count
 
 from flights.models import Flight
 
 
+@login_required
 def dashboard(request):
 
     total_flights = Flight.objects.count()

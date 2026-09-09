@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>My Account | Flight Intelligence</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f7fb;
+            color: #172033;
+        }
+
+        .navbar {
+            height: 70px;
+            background: #111827;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 42px;
+        }
+
+        .brand {
+            color: white;
+            font-size: 21px;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .nav-right a {
+            color: #d1d5db;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .nav-right a:hover {
+            color: white;
+        }
+
+        .account-link {
+            color: white !important;
+            font-weight: 600;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 55px auto;
+            padding: 0 20px;
+        }
+
+        .heading {
+            margin-bottom: 28px;
+        }
+
+        .heading h1 {
+            margin: 0 0 8px;
+            font-size: 30px;
+        }
+
+        .heading p {
+            margin: 0;
+            color: #667085;
+        }
+
+        .account-card {
+            background: white;
+            border-radius: 14px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.07);
+            padding: 35px;
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding-bottom: 28px;
+            border-bottom: 1px solid #eaecf0;
+        }
+
+        .avatar {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: #111827;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 27px;
+            font-weight: 700;
+        }
+
+        .profile-header h2 {
+            margin: 0 0 6px;
+            font-size: 23px;
+        }
+
+        .profile-header p {
+            margin: 0;
+            color: #667085;
+        }
+
+        .details {
+            padding-top: 28px;
+        }
+
+        .detail {
+            display: flex;
+            justify-content: space-between;
+            padding: 17px 0;
+            border-bottom: 1px solid #f0f2f5;
+        }
+
+        .detail:last-child {
+            border-bottom: none;
+        }
+
+        .label {
+            color: #667085;
+            font-size: 14px;
+        }
+
+        .value {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 30px;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 11px 18px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .primary {
+            background: #2563eb;
+            color: white;
+        }
+
+        .secondary {
+            background: #f2f4f7;
+            color: #344054;
+        }
+
+        .logout-form {
+            margin: 0;
+        }
+
+        .logout-button {
+            border: none;
+            cursor: pointer;
+            padding: 11px 18px;
+            border-radius: 8px;
+            background: #fee4e2;
+            color: #b42318;
+            font-size: 14px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body>
+
+<nav class="navbar">
+
+    <a href="/" class="brand">
+        ✈ Flight Intelligence
+    </a>
+
+    <div class="nav-right">
+
+        <a href="/">
+            Dashboard
+        </a>
+
+        <a href="/flights/">
+            Flights
+        </a>
+
+
+        <a href="/ai-assistant/">
+            AI Assistant
+        </a>
+
+        <a href="{% url 'account' %}" class="account-link">
+            {{ user.username }}
+        </a>
+
+    </div>
+
+</nav>
+
+
+<div class="container">
+
+    <div class="heading">
+        <h1>My Account</h1>
+        <p>Manage your Flight Intelligence account.</p>
+    </div>
+
+
+    <div class="account-card">
+
+        <div class="profile-header">
+
+            <div class="avatar">
+                {{ user.username|first|upper }}
+            </div>
+
+            <div>
+                <h2>{{ user.username }}</h2>
+                <p>Flight Intelligence member</p>
+            </div>
+
+        </div>
+
+
+        <div class="details">
+
+            <div class="detail">
+                <span class="label">Username</span>
+                <span class="value">{{ user.username }}</span>
+            </div>
+
+            <div class="detail">
+                <span class="label">Email address</span>
+                <span class="value">{{ user.email }}</span>
+            </div>
+
+            <div class="detail">
+                <span class="label">Account created</span>
+                <span class="value">
+                    {{ user.date_joined|date:"d M Y" }}
+                </span>
+            </div>
+
+            <div class="detail">
+                <span class="label">Last login</span>
+                <span class="value">
+                    {{ user.last_login|date:"d M Y, H:i" }}
+                </span>
+            </div>
+
+        </div>
+
+
+        <div class="actions">
+
+            <a href="/" class="button primary">
+                Go to Dashboard
+            </a>
+
+            <a href="/ai-assistant/" class="button secondary">
+                Open FlightIQ AI
+            </a>
+
+            <form method="POST"
+                  action="{% url 'logout' %}"
+                  class="logout-form">
+
+                {% csrf_token %}
+
+                <button type="submit" class="logout-button">
+                    Logout
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>
