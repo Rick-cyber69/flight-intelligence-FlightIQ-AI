@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Flights | Flight Intelligence</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            color: #172033;
+        }
+
+        /* NAVBAR */
+
+        .navbar {
+            height: 72px;
+            background: #111827;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            padding: 0 45px;
+            color: white;
+        }
+
+        .brand {
+            color: white;
+            text-decoration: none;
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            color: #d1d5db;
+            text-decoration: none;
+            font-size: 15px;
+        }
+
+        .nav-links a:hover,
+        .nav-links .active {
+            color: white;
+        }
+
+        /* MAIN */
+
+        .container {
+            max-width: 1250px;
+            margin: 0 auto;
+            padding: 45px 25px;
+        }
+
+        .page-header {
+            margin-bottom: 30px;
+        }
+
+        .page-header h1 {
+            margin: 0;
+            font-size: 36px;
+        }
+
+        .page-header p {
+            color: #6b7280;
+            margin-top: 10px;
+        }
+
+        /* SEARCH */
+
+        .search-card {
+            background: white;
+            padding: 25px;
+            border-radius: 14px;
+
+            box-shadow:
+                0 5px 20px
+                rgba(0, 0, 0, 0.06);
+
+            margin-bottom: 30px;
+        }
+
+        .search-form {
+            display: flex;
+            gap: 12px;
+        }
+
+        .search-input {
+            flex: 1;
+
+            padding: 15px;
+
+            border:
+                1px solid #d1d5db;
+
+            border-radius: 8px;
+
+            font-size: 15px;
+
+            outline: none;
+        }
+
+        .search-input:focus {
+            border-color: #2563eb;
+        }
+
+        .search-button {
+            border: none;
+
+            background: #2563eb;
+
+            color: white;
+
+            padding: 0 30px;
+
+            border-radius: 8px;
+
+            font-weight: 600;
+
+            cursor: pointer;
+        }
+
+        .search-button:hover {
+            background: #1d4ed8;
+        }
+
+        /* RESULTS */
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            margin-bottom: 18px;
+        }
+
+        .results-header h2 {
+            margin: 0;
+            font-size: 22px;
+        }
+
+        .result-count {
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        .flight-table {
+            background: white;
+
+            border-radius: 14px;
+
+            overflow: hidden;
+
+            box-shadow:
+                0 5px 20px
+                rgba(0, 0, 0, 0.06);
+        }
+
+        .table-header,
+        .flight-row {
+
+            display: grid;
+
+            grid-template-columns:
+                1.2fr
+                1.4fr
+                1.5fr
+                1fr
+                0.8fr;
+
+            align-items: center;
+
+            padding: 18px 25px;
+        }
+
+        .table-header {
+
+            background: #f9fafb;
+
+            color: #6b7280;
+
+            font-size: 12px;
+
+            font-weight: 700;
+
+            text-transform: uppercase;
+        }
+
+        .flight-row {
+
+            border-top:
+                1px solid #eef0f4;
+
+            font-size: 14px;
+        }
+
+        .flight-number {
+
+            font-size: 16px;
+
+            font-weight: 700;
+        }
+
+        .airline {
+            font-weight: 500;
+        }
+
+        .route {
+            font-weight: 600;
+        }
+
+        /* STATUS */
+
+        .status {
+
+            display: inline-block;
+
+            padding: 6px 12px;
+
+            border-radius: 20px;
+
+            font-size: 11px;
+
+            font-weight: 700;
+
+            text-transform: uppercase;
+        }
+
+        .active {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .scheduled {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .landed {
+            background: #e5e7eb;
+            color: #374151;
+        }
+
+        .cancelled {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .unknown {
+            background: #f3f4f6;
+            color: #374151;
+        }
+
+        .view-button {
+
+            color: #2563eb;
+
+            text-decoration: none;
+
+            font-weight: 600;
+
+            font-size: 14px;
+        }
+
+        .view-button:hover {
+            text-decoration: underline;
+        }
+
+        /* EMPTY */
+
+        .empty {
+
+            background: white;
+
+            padding: 60px 30px;
+
+            border-radius: 14px;
+
+            text-align: center;
+
+            color: #6b7280;
+
+            box-shadow:
+                0 5px 20px
+                rgba(0, 0, 0, 0.06);
+        }
+
+        .empty h3 {
+            color: #172033;
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 800px) {
+
+            .nav-links {
+                display: none;
+            }
+
+            .navbar {
+                padding: 0 20px;
+            }
+
+            .search-form {
+                flex-direction: column;
+            }
+
+            .search-button {
+                padding: 14px;
+            }
+
+            .flight-table {
+                overflow-x: auto;
+            }
+
+            .table-header,
+            .flight-row {
+                min-width: 750px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<nav class="navbar">
+
+    <a
+        href="/"
+        class="brand"
+    >
+        ✈ Flight Intelligence
+    </a>
+
+
+    <div class="nav-links">
+
+        <a href="/">
+            Dashboard
+        </a>
+
+        <a
+            href="/flights/"
+            class="active"
+        >
+            Flights
+        </a>
+
+        <a href="#">
+            Tracking
+        </a>
+
+        <a href="#">
+            AI Assistant
+        </a>
+
+    </div>
+
+</nav>
+
+
+<main class="container">
+
+
+    <div class="page-header">
+
+        <h1>
+            Flights
+        </h1>
+
+        <p>
+            Search and explore available flight information.
+        </p>
+
+    </div>
+
+
+    <!-- SEARCH -->
+
+    <div class="search-card">
+
+        <form
+            method="GET"
+            action="{% url 'flight_search' %}"
+            class="search-form"
+        >
+
+            <input
+                type="text"
+                name="flight"
+                class="search-input"
+                placeholder="Search by flight number e.g. EK202"
+                value="{{ flight_number }}"
+            >
+
+            <button
+                type="submit"
+                class="search-button"
+            >
+                Search
+            </button>
+
+        </form>
+
+    </div>
+
+
+    {% if error %}
+
+        <div class="empty">
+
+            <h3>
+                Unable to retrieve flight data
+            </h3>
+
+            <p>
+                {{ error }}
+            </p>
+
+        </div>
+
+    {% elif flights %}
+
+
+        <div class="results-header">
+
+            <h2>
+                Flight Results
+            </h2>
+
+            <div class="result-count">
+
+                {{ flights|length }} result{{ flights|length|pluralize }}
+
+            </div>
+
+        </div>
+
+
+        <div class="flight-table">
+
+
+            <div class="table-header">
+
+                <div>
+                    Flight
+                </div>
+
+                <div>
+                    Airline
+                </div>
+
+                <div>
+                    Route
+                </div>
+
+                <div>
+                    Status
+                </div>
+
+                <div>
+                    Action
+                </div>
+
+            </div>
+
+
+            {% for flight in flights %}
+
+                <div class="flight-row">
+
+
+                    <div class="flight-number">
+
+                        {{ flight.flight_iata }}
+
+                    </div>
+
+
+                    <div class="airline">
+
+                        {{ flight.airline_name|default:"Unknown" }}
+
+                    </div>
+
+
+                    <div class="route">
+
+                        {{ flight.departure_iata }}
+                        →
+                        {{ flight.arrival_iata }}
+
+                    </div>
+
+
+                    <div>
+
+                        <span
+                            class="status {{ flight.flight_status }}"
+                        >
+                            {{ flight.flight_status }}
+                        </span>
+
+                    </div>
+
+
+                    <div>
+
+                        <a
+                            href="{% url 'flight_detail' flight.flight_iata %}"
+                            class="view-button"
+                        >
+                            View →
+                        </a>
+
+                    </div>
+
+
+                </div>
+
+            {% endfor %}
+
+
+        </div>
+
+
+    {% elif searched %}
+
+
+        <div class="empty">
+
+            <h3>
+                No flights found
+            </h3>
+
+            <p>
+                We couldn't find a flight matching
+                "{{ flight_number }}".
+            </p>
+
+        </div>
+
+
+    {% else %}
+
+
+        <div class="empty">
+
+            <h3>
+                Search for a flight
+            </h3>
+
+            <p>
+                Enter a flight number above to
+                view its information.
+            </p>
+
+        </div>
+
+
+    {% endif %}
+
+
+</main>
+
+
+</body>
+
+</html>
