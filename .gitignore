@@ -1,9 +1,47 @@
+# Python virtual environment
 venv/
+.venv/
+
+# Environment variables / secrets
 .env
+.env.*
+
+# Python cache
 __pycache__/
-*.pyc
+*.py[cod]
+*$py.class
+
+# Django database
 db.sqlite3
+*.sqlite3
+
+# Django generated files
 staticfiles/
 media/
+
+# IDE settings
 .idea/
 .vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Coverage / testing
+.coverage
+htmlcov/
+.pytest_cache/
+
+# Build / distribution
+build/
+dist/
+*.egg-info/
+
+# Local environment files
+*.local
+
+# Docker
+docker-compose.override.yml
