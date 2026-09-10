@@ -81,4 +81,17 @@ def logout_view(request):
 
 @login_required
 def account_view(request):
-    return render(request, "users/account.html")
+
+    search_history = (
+        request.user.flight_searches
+        .select_related("flight")
+        .all()[:20]
+    )
+
+    return render(
+        request,
+        "users/account.html",
+        {
+            "search_history": search_history,
+        }
+    )

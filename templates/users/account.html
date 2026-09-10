@@ -1,297 +1,626 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% extends "base.html" %}
 
-    <title>My Account | Flight Intelligence</title>
 
-    <style>
-        * {
-            box-sizing: border-box;
+{% block title %}
+    My Account | Flight Intelligence
+{% endblock %}
+
+
+{% block extra_css %}
+
+<style>
+
+    /* =====================================================
+       ACCOUNT PAGE
+    ===================================================== */
+
+    .account-page {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 40px 20px 60px;
+    }
+
+
+    /* =====================================================
+       PROFILE CARD
+    ===================================================== */
+
+    .profile-card {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 25px;
+
+        background: white;
+        border: 1px solid #eaecf0;
+        border-radius: 14px;
+
+        padding: 28px 30px;
+
+        box-shadow:
+            0 8px 25px
+            rgba(15, 23, 42, 0.05);
+    }
+
+    .profile-left {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+    }
+
+    .profile-avatar {
+        width: 64px;
+        height: 64px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        border-radius: 50%;
+
+        background: #111827;
+        color: white;
+
+        font-size: 24px;
+        font-weight: 700;
+    }
+
+    .profile-info h1 {
+        margin: 0 0 5px;
+
+        color: #111827;
+
+        font-size: 24px;
+    }
+
+    .profile-info p {
+        margin: 0;
+
+        color: #667085;
+
+        font-size: 14px;
+    }
+
+
+    /* =====================================================
+       ACCOUNT DETAILS
+    ===================================================== */
+
+    .details-grid {
+        display: grid;
+
+        grid-template-columns:
+            repeat(3, 1fr);
+
+        gap: 16px;
+
+        margin-top: 20px;
+    }
+
+    .detail-card {
+        background: white;
+
+        border: 1px solid #eaecf0;
+
+        border-radius: 12px;
+
+        padding: 20px;
+    }
+
+    .detail-label {
+        margin-bottom: 7px;
+
+        color: #667085;
+
+        font-size: 12px;
+
+        font-weight: 600;
+
+        text-transform: uppercase;
+
+        letter-spacing: 0.04em;
+    }
+
+    .detail-value {
+        color: #172033;
+
+        font-size: 15px;
+
+        font-weight: 600;
+
+        word-break: break-word;
+    }
+
+
+    /* =====================================================
+       SECTION
+    ===================================================== */
+
+    .account-section {
+        margin-top: 30px;
+    }
+
+    .section-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        margin-bottom: 15px;
+    }
+
+    .section-header h2 {
+        margin: 0;
+
+        color: #111827;
+
+        font-size: 20px;
+    }
+
+    .section-header span {
+        color: #667085;
+
+        font-size: 13px;
+    }
+
+
+    /* =====================================================
+       SEARCH HISTORY
+    ===================================================== */
+
+    .history-card {
+        overflow: hidden;
+
+        background: white;
+
+        border: 1px solid #eaecf0;
+
+        border-radius: 12px;
+    }
+
+    .history-row {
+        display: grid;
+
+        grid-template-columns:
+            1.2fr 1fr 1fr 1fr;
+
+        align-items: center;
+
+        gap: 15px;
+
+        padding: 17px 20px;
+
+        border-bottom:
+            1px solid #eaecf0;
+    }
+
+    .history-row:last-child {
+        border-bottom: none;
+    }
+
+    .history-header {
+        background: #f9fafb;
+
+        color: #667085;
+
+        font-size: 12px;
+
+        font-weight: 700;
+
+        text-transform: uppercase;
+
+        letter-spacing: 0.04em;
+    }
+
+    .flight-code {
+        color: #111827;
+
+        font-size: 14px;
+
+        font-weight: 700;
+    }
+
+    .route {
+        color: #344054;
+
+        font-size: 14px;
+
+        font-weight: 600;
+    }
+
+    .status {
+        display: inline-flex;
+
+        width: fit-content;
+
+        padding: 5px 9px;
+
+        border-radius: 20px;
+
+        background: #f2f4f7;
+
+        color: #344054;
+
+        font-size: 11px;
+
+        font-weight: 700;
+
+        text-transform: uppercase;
+    }
+
+    .searched-time {
+        color: #667085;
+
+        font-size: 13px;
+    }
+
+
+    /* =====================================================
+       EMPTY HISTORY
+    ===================================================== */
+
+    .empty-history {
+        padding: 45px 25px;
+
+        text-align: center;
+    }
+
+    .empty-icon {
+        margin-bottom: 12px;
+
+        font-size: 32px;
+    }
+
+    .empty-history h3 {
+        margin: 0 0 7px;
+
+        color: #172033;
+
+        font-size: 17px;
+    }
+
+    .empty-history p {
+        margin: 0 0 20px;
+
+        color: #667085;
+
+        font-size: 14px;
+    }
+
+
+    /* =====================================================
+       BUTTONS
+    ===================================================== */
+
+    .account-actions {
+        display: flex;
+
+        gap: 10px;
+
+        flex-wrap: wrap;
+    }
+
+    .action-button {
+        display: inline-flex;
+
+        align-items: center;
+        justify-content: center;
+
+        padding: 10px 15px;
+
+        border-radius: 8px;
+
+        text-decoration: none;
+
+        font-size: 13px;
+
+        font-weight: 650;
+    }
+
+    .primary-button {
+        background: #111827;
+
+        color: white;
+    }
+
+    .primary-button:hover {
+        background: #1f2937;
+    }
+
+    .secondary-button {
+        background: #f2f4f7;
+
+        color: #172033;
+    }
+
+    .secondary-button:hover {
+        background: #e4e7ec;
+    }
+
+
+    /* =====================================================
+       RESPONSIVE
+    ===================================================== */
+
+    @media (max-width: 800px) {
+
+        .details-grid {
+            grid-template-columns: 1fr;
         }
 
-        body {
-            margin: 0;
-            font-family: Arial, Helvetica, sans-serif;
-            background: #f4f7fb;
-            color: #172033;
+        .history-row {
+            grid-template-columns:
+                1fr 1fr;
         }
 
-        .navbar {
-            height: 70px;
-            background: #111827;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 42px;
+        .history-header {
+            display: none;
         }
 
-        .brand {
-            color: white;
-            font-size: 21px;
-            font-weight: 700;
-            text-decoration: none;
+    }
+
+
+    @media (max-width: 600px) {
+
+        .account-page {
+            padding:
+                25px 15px 45px;
         }
 
-        .nav-right {
-            display: flex;
-            align-items: center;
-            gap: 25px;
+        .profile-card {
+            align-items: flex-start;
+
+            flex-direction: column;
+
+            padding: 23px;
         }
 
-        .nav-right a {
-            color: #d1d5db;
-            text-decoration: none;
-            font-size: 14px;
+        .profile-left {
+            align-items: flex-start;
         }
 
-        .nav-right a:hover {
-            color: white;
+        .history-row {
+            grid-template-columns: 1fr;
+
+            gap: 7px;
+
+            padding: 16px;
         }
 
-        .account-link {
-            color: white !important;
-            font-weight: 600;
-        }
+    }
 
-        .container {
-            max-width: 900px;
-            margin: 55px auto;
-            padding: 0 20px;
-        }
+</style>
 
-        .heading {
-            margin-bottom: 28px;
-        }
-
-        .heading h1 {
-            margin: 0 0 8px;
-            font-size: 30px;
-        }
-
-        .heading p {
-            margin: 0;
-            color: #667085;
-        }
-
-        .account-card {
-            background: white;
-            border-radius: 14px;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.07);
-            padding: 35px;
-        }
-
-        .profile-header {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            padding-bottom: 28px;
-            border-bottom: 1px solid #eaecf0;
-        }
-
-        .avatar {
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            background: #111827;
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 27px;
-            font-weight: 700;
-        }
-
-        .profile-header h2 {
-            margin: 0 0 6px;
-            font-size: 23px;
-        }
-
-        .profile-header p {
-            margin: 0;
-            color: #667085;
-        }
-
-        .details {
-            padding-top: 28px;
-        }
-
-        .detail {
-            display: flex;
-            justify-content: space-between;
-            padding: 17px 0;
-            border-bottom: 1px solid #f0f2f5;
-        }
-
-        .detail:last-child {
-            border-bottom: none;
-        }
-
-        .label {
-            color: #667085;
-            font-size: 14px;
-        }
-
-        .value {
-            font-weight: 600;
-            font-size: 14px;
-        }
-
-        .actions {
-            display: flex;
-            gap: 12px;
-            margin-top: 30px;
-        }
-
-        .button {
-            display: inline-block;
-            padding: 11px 18px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 600;
-        }
-
-        .primary {
-            background: #2563eb;
-            color: white;
-        }
-
-        .secondary {
-            background: #f2f4f7;
-            color: #344054;
-        }
-
-        .logout-form {
-            margin: 0;
-        }
-
-        .logout-button {
-            border: none;
-            cursor: pointer;
-            padding: 11px 18px;
-            border-radius: 8px;
-            background: #fee4e2;
-            color: #b42318;
-            font-size: 14px;
-            font-weight: 600;
-        }
-    </style>
-</head>
-
-<body>
-
-<nav class="navbar">
-
-    <a href="/" class="brand">
-        ✈ Flight Intelligence
-    </a>
-
-    <div class="nav-right">
-
-        <a href="/">
-            Dashboard
-        </a>
-
-        <a href="/flights/">
-            Flights
-        </a>
+{% endblock %}
 
 
-        <a href="/ai-assistant/">
-            AI Assistant
-        </a>
+{% block content %}
 
-        <a href="{% url 'account' %}" class="account-link">
-            {{ user.username }}
-        </a>
-
-    </div>
-
-</nav>
+<main class="account-page">
 
 
-<div class="container">
+    <!-- =================================================
+         PROFILE
+    ================================================== -->
 
-    <div class="heading">
-        <h1>My Account</h1>
-        <p>Manage your Flight Intelligence account.</p>
-    </div>
+    <section class="profile-card">
 
+        <div class="profile-left">
 
-    <div class="account-card">
-
-        <div class="profile-header">
-
-            <div class="avatar">
+            <div class="profile-avatar">
                 {{ user.username|first|upper }}
             </div>
 
-            <div>
-                <h2>{{ user.username }}</h2>
-                <p>Flight Intelligence member</p>
+            <div class="profile-info">
+
+                <h1>
+                    Welcome, {{ user.username }}
+                </h1>
+
+                <p>
+                    Your Flight Intelligence account
+                </p>
+
             </div>
 
         </div>
 
 
-        <div class="details">
+        <div class="account-actions">
 
-            <div class="detail">
-                <span class="label">Username</span>
-                <span class="value">{{ user.username }}</span>
-            </div>
-
-            <div class="detail">
-                <span class="label">Email address</span>
-                <span class="value">{{ user.email }}</span>
-            </div>
-
-            <div class="detail">
-                <span class="label">Account created</span>
-                <span class="value">
-                    {{ user.date_joined|date:"d M Y" }}
-                </span>
-            </div>
-
-            <div class="detail">
-                <span class="label">Last login</span>
-                <span class="value">
-                    {{ user.last_login|date:"d M Y, H:i" }}
-                </span>
-            </div>
-
-        </div>
-
-
-        <div class="actions">
-
-            <a href="/" class="button primary">
-                Go to Dashboard
+            <a
+                href="{% url 'flight_search' %}"
+                class="action-button primary-button"
+            >
+                Search Flights
             </a>
 
-            <a href="/ai-assistant/" class="button secondary">
-                Open FlightIQ AI
+            <a
+                href="{% url 'ai_assistant' %}"
+                class="action-button secondary-button"
+            >
+                FlightIQ AI
             </a>
-
-            <form method="POST"
-                  action="{% url 'logout' %}"
-                  class="logout-form">
-
-                {% csrf_token %}
-
-                <button type="submit" class="logout-button">
-                    Logout
-                </button>
-
-            </form>
 
         </div>
 
-    </div>
+    </section>
 
-</div>
 
-</body>
-</html>
+    <!-- =================================================
+         ACCOUNT DETAILS
+    ================================================== -->
+
+    <section class="details-grid">
+
+        <div class="detail-card">
+
+            <div class="detail-label">
+                Username
+            </div>
+
+            <div class="detail-value">
+                {{ user.username }}
+            </div>
+
+        </div>
+
+
+        <div class="detail-card">
+
+            <div class="detail-label">
+                Email
+            </div>
+
+            <div class="detail-value">
+                {{ user.email|default:"Not provided" }}
+            </div>
+
+        </div>
+
+
+        <div class="detail-card">
+
+            <div class="detail-label">
+                Member Since
+            </div>
+
+            <div class="detail-value">
+                {{ user.date_joined|date:"d M Y" }}
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =================================================
+         FLIGHT SEARCH HISTORY
+    ================================================== -->
+
+    <section class="account-section">
+
+        <div class="section-header">
+
+            <h2>
+                Flight Search History
+            </h2>
+
+            <span>
+                Your 20 most recent searches
+            </span>
+
+        </div>
+
+
+        <div class="history-card">
+
+            {% if search_history %}
+
+                <!-- HEADER -->
+
+                <div class="history-row history-header">
+
+                    <div>
+                        Flight
+                    </div>
+
+                    <div>
+                        Route
+                    </div>
+
+                    <div>
+                        Status
+                    </div>
+
+                    <div>
+                        Searched
+                    </div>
+
+                </div>
+
+
+                <!-- HISTORY -->
+
+                {% for history in search_history %}
+
+                    <div class="history-row">
+
+                        <div>
+
+                            <div class="flight-code">
+                                {{ history.flight.flight_iata|default:history.flight.flight_number }}
+                            </div>
+
+                            <div style="color:#667085; font-size:12px; margin-top:3px;">
+                                {{ history.flight.airline_name|default:"Unknown airline" }}
+                            </div>
+
+                        </div>
+
+
+                        <div class="route">
+
+                            {{ history.flight.departure_iata|default:"N/A" }}
+
+                            →
+
+                            {{ history.flight.arrival_iata|default:"N/A" }}
+
+                        </div>
+
+
+                        <div>
+
+                            <span class="status">
+                                {{ history.flight.flight_status|default:"Unknown" }}
+                            </span>
+
+                        </div>
+
+
+                        <div class="searched-time">
+
+                            {{ history.searched_at|date:"d M Y, H:i" }}
+
+                        </div>
+
+                    </div>
+
+                {% endfor %}
+
+            {% else %}
+
+                <div class="empty-history">
+
+                    <div class="empty-icon">
+                        ✈
+                    </div>
+
+                    <h3>
+                        No flight searches yet
+                    </h3>
+
+                    <p>
+                        Search for a flight and your searches
+                        will appear here.
+                    </p>
+
+                    <a
+                        href="{% url 'flight_search' %}"
+                        class="action-button primary-button"
+                    >
+                        Search Your First Flight
+                    </a>
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+    </section>
+
+
+</main>
+
+{% endblock %}

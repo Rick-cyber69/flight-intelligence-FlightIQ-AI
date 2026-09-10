@@ -1,246 +1,429 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% extends "base.html" %}
 
-    <title>Create Account | FlightIQ AI</title>
 
-    <style>
-        * {
-            box-sizing: border-box;
+{% block title %}
+    Create Account | Flight Intelligence
+{% endblock %}
+
+
+{% block extra_css %}
+
+<style>
+
+    /* =====================================================
+       REGISTER PAGE
+    ===================================================== */
+
+    .register-page {
+        min-height: calc(100vh - 72px);
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        padding: 40px 20px;
+    }
+
+
+    /* =====================================================
+       REGISTER CARD
+    ===================================================== */
+
+    .register-card {
+        width: 100%;
+        max-width: 450px;
+
+        background: white;
+
+        border: 1px solid #eaecf0;
+
+        border-radius: 14px;
+
+        padding: 38px;
+
+        box-shadow:
+            0 10px 35px
+            rgba(15, 23, 42, 0.07);
+    }
+
+
+    /* =====================================================
+       ICON
+    ===================================================== */
+
+    .register-icon {
+        width: 52px;
+        height: 52px;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        margin-bottom: 20px;
+
+        border-radius: 12px;
+
+        background: #111827;
+
+        color: white;
+
+        font-size: 25px;
+    }
+
+
+    /* =====================================================
+       HEADING
+    ===================================================== */
+
+    .register-card h1 {
+        margin: 0 0 8px;
+
+        color: #111827;
+
+        font-size: 28px;
+
+        line-height: 1.2;
+
+        font-weight: 750;
+    }
+
+    .register-subtitle {
+        margin-bottom: 28px;
+
+        color: #667085;
+
+        font-size: 14px;
+
+        line-height: 1.6;
+    }
+
+
+    /* =====================================================
+       MESSAGES
+    ===================================================== */
+
+    .message {
+        padding: 12px 14px;
+
+        margin-bottom: 18px;
+
+        border-radius: 8px;
+
+        background: #fef2f2;
+
+        color: #b42318;
+
+        font-size: 14px;
+
+        line-height: 1.5;
+    }
+
+
+    /* =====================================================
+       FORM
+    ===================================================== */
+
+    .register-field {
+        margin-bottom: 18px;
+    }
+
+    .register-field label {
+        display: block;
+
+        margin-bottom: 7px;
+
+        color: #172033;
+
+        font-size: 14px;
+
+        font-weight: 650;
+    }
+
+    .register-field input {
+        width: 100%;
+
+        height: 46px;
+
+        padding: 0 14px;
+
+        border:
+            1px solid #d0d5dd;
+
+        border-radius: 8px;
+
+        background: white;
+
+        color: #172033;
+
+        font-family: inherit;
+
+        font-size: 14px;
+
+        outline: none;
+
+        transition:
+            border-color 0.2s ease,
+            box-shadow 0.2s ease;
+    }
+
+    .register-field input::placeholder {
+        color: #98a2b3;
+    }
+
+    .register-field input:focus {
+        border-color: #2563eb;
+
+        box-shadow:
+            0 0 0 3px
+            rgba(37, 99, 235, 0.10);
+    }
+
+
+    /* =====================================================
+       CREATE ACCOUNT BUTTON
+    ===================================================== */
+
+    .register-button {
+        width: 100%;
+
+        height: 46px;
+
+        margin-top: 5px;
+
+        border: none;
+
+        border-radius: 8px;
+
+        background: #111827;
+
+        color: white;
+
+        font-family: inherit;
+
+        font-size: 14px;
+
+        font-weight: 700;
+
+        cursor: pointer;
+
+        transition:
+            background 0.2s ease,
+            transform 0.1s ease;
+    }
+
+    .register-button:hover {
+        background: #1f2937;
+    }
+
+    .register-button:active {
+        transform: translateY(1px);
+    }
+
+
+    /* =====================================================
+       FOOTER
+    ===================================================== */
+
+    .register-footer {
+        margin-top: 22px;
+
+        text-align: center;
+
+        color: #667085;
+
+        font-size: 14px;
+    }
+
+    .register-footer a {
+        color: #2563eb;
+
+        text-decoration: none;
+
+        font-weight: 650;
+    }
+
+    .register-footer a:hover {
+        color: #1d4ed8;
+    }
+
+
+    /* =====================================================
+       RESPONSIVE
+    ===================================================== */
+
+    @media (max-width: 500px) {
+
+        .register-page {
+            min-height: calc(100vh - 64px);
+
+            padding: 30px 16px;
         }
 
-        body {
-            margin: 0;
-            font-family: Arial, Helvetica, sans-serif;
-            background: #f4f7fb;
-            color: #172033;
+        .register-card {
+            padding: 25px;
         }
 
-        .navbar {
-            height: 70px;
-            background: #111827;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 50px;
-        }
+    }
 
-        .brand {
-            color: white;
-            font-size: 22px;
-            font-weight: 700;
-            text-decoration: none;
-        }
+</style>
 
-        .login-link {
-            color: white;
-            text-decoration: none;
-            font-size: 15px;
-        }
+{% endblock %}
 
-        .login-link:hover {
-            opacity: 0.8;
-        }
 
-        .page {
-            min-height: calc(100vh - 70px);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 40px 20px;
-        }
+{% block content %}
 
-        .card {
-            width: 100%;
-            max-width: 450px;
-            background: white;
-            border-radius: 14px;
-            padding: 38px;
-            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.08);
-        }
+<main class="register-page">
 
-        .icon {
-            width: 52px;
-            height: 52px;
-            border-radius: 12px;
-            background: #111827;
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 25px;
-            margin-bottom: 20px;
-        }
+    <section class="register-card">
 
-        h1 {
-            margin: 0 0 8px;
-            font-size: 28px;
-        }
 
-        .subtitle {
-            color: #667085;
-            margin-bottom: 28px;
-            font-size: 14px;
-        }
+        <!-- ICON -->
 
-        .message {
-            padding: 12px 14px;
-            border-radius: 8px;
-            background: #fef2f2;
-            color: #b42318;
-            font-size: 14px;
-            margin-bottom: 18px;
-        }
+        <div class="register-icon">
+            ✈
+        </div>
 
-        .field {
-            margin-bottom: 18px;
-        }
 
-        label {
-            display: block;
-            font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 7px;
-        }
+        <!-- HEADING -->
 
-        input {
-            width: 100%;
-            padding: 12px 14px;
-            border: 1px solid #d0d5dd;
-            border-radius: 8px;
-            font-size: 15px;
-            outline: none;
-        }
+        <h1>
+            Create your account
+        </h1>
 
-        input:focus {
-            border-color: #111827;
-            box-shadow: 0 0 0 3px rgba(17, 24, 39, 0.08);
-        }
-
-        .button {
-            width: 100%;
-            border: none;
-            border-radius: 8px;
-            padding: 13px;
-            background: #111827;
-            color: white;
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            margin-top: 5px;
-        }
-
-        .button:hover {
-            background: #1f2937;
-        }
-
-        .footer {
-            text-align: center;
-            margin-top: 22px;
-            font-size: 14px;
-            color: #667085;
-        }
-
-        .footer a {
-            color: #111827;
-            font-weight: 600;
-            text-decoration: none;
-        }
-    </style>
-</head>
-
-<body>
-
-<nav class="navbar">
-    <a href="/" class="brand">✈ FlightIQ AI</a>
-
-    <a href="{% url 'login' %}" class="login-link">
-        Sign In
-    </a>
-</nav>
-
-<div class="page">
-
-    <div class="card">
-
-        <div class="icon">✈</div>
-
-        <h1>Create your account</h1>
-
-        <div class="subtitle">
+        <div class="register-subtitle">
             Register to access FlightIQ AI and flight intelligence tools.
         </div>
 
+
+        <!-- DJANGO MESSAGES -->
+
         {% if messages %}
+
             {% for message in messages %}
+
                 <div class="message">
                     {{ message }}
                 </div>
+
             {% endfor %}
+
         {% endif %}
 
+
+        <!-- REGISTRATION FORM -->
+
         <form method="POST">
+
             {% csrf_token %}
 
-            <div class="field">
-                <label for="username">Username</label>
+
+            <!-- USERNAME -->
+
+            <div class="register-field">
+
+                <label for="username">
+                    Username
+                </label>
+
                 <input
                     type="text"
                     id="username"
                     name="username"
                     placeholder="Enter your username"
+                    autocomplete="username"
                     required
                 >
+
             </div>
 
-            <div class="field">
-                <label for="email">Email address</label>
+
+            <!-- EMAIL -->
+
+            <div class="register-field">
+
+                <label for="email">
+                    Email address
+                </label>
+
                 <input
                     type="email"
                     id="email"
                     name="email"
                     placeholder="Enter your email"
+                    autocomplete="email"
                     required
                 >
+
             </div>
 
-            <div class="field">
-                <label for="password">Password</label>
+
+            <!-- PASSWORD -->
+
+            <div class="register-field">
+
+                <label for="password">
+                    Password
+                </label>
+
                 <input
                     type="password"
                     id="password"
                     name="password"
                     placeholder="Create a password"
+                    autocomplete="new-password"
                     required
                 >
+
             </div>
 
-            <div class="field">
-                <label for="confirm_password">Confirm password</label>
+
+            <!-- CONFIRM PASSWORD -->
+
+            <div class="register-field">
+
+                <label for="confirm_password">
+                    Confirm password
+                </label>
+
                 <input
                     type="password"
                     id="confirm_password"
                     name="confirm_password"
                     placeholder="Confirm your password"
+                    autocomplete="new-password"
                     required
                 >
+
             </div>
 
-            <button type="submit" class="button">
+
+            <!-- SUBMIT -->
+
+            <button
+                type="submit"
+                class="register-button"
+            >
                 Create Account
             </button>
+
         </form>
 
-        <div class="footer">
+
+        <!-- LOGIN LINK -->
+
+        <div class="register-footer">
+
             Already have an account?
-            <a href="{% url 'login' %}">Sign in</a>
+
+            <a href="{% url 'login' %}">
+                Sign in
+            </a>
+
         </div>
 
-    </div>
 
-</div>
+    </section>
 
-</body>
-</html>
+</main>
+
+{% endblock %}
